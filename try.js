@@ -43,12 +43,12 @@ function generatePalette() {
 
     const lockIcon = document.createElement("div");
     lockIcon.className = "lock-icon";
-    lockIcon.innerHTML = colors[i].locked ? "🔒" : "🔓";
+    lockIcon.innerHTML = colors[i].locked ? "🔒" : "🛅";
 
     lockIcon.addEventListener("click", (e) => {
       e.stopPropagation();
       colors[i].locked = !colors[i].locked;
-      lockIcon.innerHTML = colors[i].locked ? "🔒" : "🔓";
+      lockIcon.innerHTML = colors[i].locked ? "🔒" : "🛅";
       lockIcon.classList.toggle("locked", colors[i].locked);
       savePalette();
     });

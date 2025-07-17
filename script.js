@@ -43,14 +43,29 @@ function generatePalette() {
 
     const lockIcon = document.createElement("div");
     lockIcon.className = "lock-icon";
-    lockIcon.innerHTML = colors[i].locked ? "🔒" : "🛅";
+    lockIcon.innerHTML = colors[i].locked ? "🔒" : "🔓";
 
     lockIcon.addEventListener("click", (e) => {
       e.stopPropagation();
       colors[i].locked = !colors[i].locked;
-      lockIcon.innerHTML = colors[i].locked ? "🔒" : "🛅";
+      lockIcon.innerHTML = colors[i].locked ? "🔒" : "🔓";
       lockIcon.classList.toggle("locked", colors[i].locked);
       savePalette();
+    });
+
+    const refreshIcon = document.createElement("div");
+    refreshIcon.className = "refresh-icon";
+    refreshIcon.innerHTML = "🔁";
+
+    refreshIcon.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!colors[i].locked) {
+        const newColor = generateRandomColor();
+        colors[i].color = newColor;
+        box.style.backgroundColor = newColor;
+        code.innerText = newColor;
+        savePalette();
+      }
     });
 
     const code = document.createElement("div");
@@ -58,6 +73,7 @@ function generatePalette() {
     code.innerText = color;
 
     box.appendChild(lockIcon);
+    box.appendChild(refreshIcon);
     box.appendChild(code);
 
     box.addEventListener("click", () => {
