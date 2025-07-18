@@ -1,28 +1,6 @@
-Recently, I replaced the old alert with a smooth toast popup using Toastify.js. Now, when I click a color, it shows a “#HEX copied!” message right on the screen. To keep things readable, I added contrast-aware text color for the toast too, so it switches between black and white depending on the background. I also gave the interface a fresh new look with a soft gradient background and a glassy frosted effect around the color palette area. To top it off, I improved the typography by adding Google Fonts — Aubrey for headings and buttons, and Outfit for color codes and toast messages — making the whole UI look more stylish and modern.
+Added three new features to the color palette generator to make it more flexible and fun to use. First, I added a manual color picker inside each color box, so now you can pick your own colors using a built-in color input. It updates the box and text automatically, and even works on locked colors. Second, I added a slider to let you choose how many color blocks you want to see — anywhere between 3 and 8. This setting is saved and stays the same next time you open the page. Lastly, I made it possible to rearrange the color blocks by dragging them around. This uses drag-and-drop with Sortable.js and saves the new order right away, so you can organize your colors however you like. These updates make the tool more customizable and user-friendly.
 
 
-
-
-
-## 🎨 CUSTOMIZATION FEATURES
-
-Let users customize palettes:
-
-9. **Manual Color Picker**
-
-   * Add input (type=color) to manually set a color.
-
-10. **Set Number of Colors**
-
-    * Let user choose 3–8 blocks using a slider or dropdown.
-
-11. **Drag and Rearrange Colors**
-
-    * Use Sortable.js to allow drag-and-drop reordering of colors.
-
-12. **Name the Palette**
-
-    * Give each saved palette a name or tag.
 
 ---
 
