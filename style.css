@@ -1,15 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Aubrey&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+
+::selection {
+  color: rgb(255, 127, 76);
+  background-color: aliceblue;
+}
+
 body {
   font-family: sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: #f4f4f4;
+  background: linear-gradient(135deg, #ff9c9c, #f8c4c4);
   margin: 0;
 }
 
 .container {
   text-align: center;
+  background: rgba(15, 18, 20, 0.089);
+  border-radius: 20px;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.container h1 {
+  color: #1f1f1f;
+  font-family: "Aubrey", system-ui;
+  font-size: xx-large;
+}
+.container button {
+  color: #1f1f1f;
+  font-family: "Aubrey", system-ui;
+  font-size: x-large;
+}
+
+.color-code {
+  font-family: "Outfit", sans-serif;
+  letter-spacing: 1px;
+}
+
+.toastify {
+  font-family: "Outfit", sans-serif;
+  letter-spacing: 1px;
 }
 
 .palette {
@@ -45,7 +81,6 @@ body {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
   padding: 4px;
   font-size: 14px;
@@ -63,7 +98,6 @@ body {
   position: absolute;
   top: 8px;
   left: 8px;
-  background: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
   padding: 4px;
   font-size: 14px;
