@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 </head>
 
 <body>
@@ -20,6 +22,16 @@
         <br><br>
         <label for="colorCount">Number of Colors: <span id="colorCountValue">5</span></label>
         <input type="range" id="colorCount" min="3" max="8" value="5" />
+        <br>
+        <button onclick="saveCurrentPalette()">💾 Save Palette</button>
+        <button onclick="showSavedPalettes()">📂 View Saved</button>
+        <div id="savedPalettesModal" class="modal" style="display:none;"></div>
+        <br>
+        <button id="downloadImage">📷 Download PNG</button>
+        <button id="downloadJSON">📄 Download JSON</button>
+        <br>
+        <button id="shareBtn">🔗 Share Palette</button>
+
     </div>
 
 

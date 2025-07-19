@@ -28,6 +28,20 @@ window.onload = function () {
   });
 
   generatePalette();
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlColors = urlParams.get("colors");
+
+  if (urlColors) {
+    const decodedColors = urlColors
+      .split("-")
+      .map((c) => `#${c.toUpperCase()}`);
+    for (let i = 0; i < decodedColors.length; i++) {
+      colors[i] = { color: decodedColors[i], locked: false };
+    }
+    numColors = decodedColors.length;
+    document.getElementById("colorCount").value = numColors;
+    document.getElementById("colorCountValue").textContent = numColors;
+  }
 };
 
 function generateRandomColor() {
@@ -194,3 +208,126 @@ function updateColor(index, newColor) {
 function savePalette() {
   localStorage.setItem("palette", JSON.stringify(colors));
 }
+
+function saveCurrentPalette() {
+  const saved = JSON.parse(localStorage.getItem("savedPalettes") || "[]");
+  saved.push([...colors]); // Clone the current palette
+  localStorage.setItem("savedPalettes", JSON.stringify(saved));
+  Toastify({
+    text: "Palette saved!",
+    duration: 2000,
+    gravity: "top",
+    position: "center",
+    backgroundColor: "#333",
+    style: { color: "#fff" },
+  }).showToast();
+}
+
+function showSavedPalettes() {
+  const modal = document.getElementById("savedPalettesModal");
+  modal.innerHTML = "";
+  modal.style.display = "block";
+  modal.style.position = "fixed";
+  modal.style.top = "20%";
+  modal.style.left = "50%";
+  modal.style.transform = "translateX(-50%)";
+  modal.style.background = "#fff";
+  modal.style.padding = "20px";
+  modal.style.borderRadius = "10px";
+  modal.style.zIndex = "999";
+
+  const saved = JSON.parse(localStorage.getItem("savedPalettes") || "[]");
+
+  if (saved.length === 0) {
+    modal.innerHTML = "<p>No saved palettes.</p>";
+    return;
+  }
+
+  saved.forEach((palette, index) => {
+    const row = document.createElement("div");
+    row.style.display = "flex";
+    row.style.marginBottom = "10px";
+    row.style.cursor = "pointer";
+
+    palette.forEach((c) => {
+      const preview = document.createElement("div");
+      preview.style.backgroundColor = c.color;
+      preview.style.width = "30px";
+      preview.style.height = "30px";
+      preview.style.marginRight = "5px";
+      preview.style.borderRadius = "5px";
+      row.appendChild(preview);
+    });
+
+    palette.forEach((c) => {
+      const preview = document.createElement("div");
+      preview.style.backgroundColor = c.color;
+      preview.style.width = "30px";
+      preview.style.height = "30px";
+      preview.style.marginRight = "5px";
+      preview.style.borderRadius = "5px";
+      preview.title = c.color;
+
+      preview.addEventListener("click", (e) => {
+        e.stopPropagation();
+        navigator.clipboard.writeText(c.color);
+        Toastify({
+          text: `${c.color} copied!`,
+          duration: 2000,
+          gravity: "top",
+          position: "center",
+          backgroundColor: c.color,
+          style: {
+            color: getContrastColor(c.color),
+          },
+        }).showToast();
+      });
+
+      row.appendChild(preview);
+    });
+
+    modal.appendChild(row);
+  });
+
+  // Add close button
+  const closeBtn = document.createElement("button");
+  closeBtn.textContent = "Close";
+  closeBtn.onclick = () => (modal.style.display = "none");
+  modal.appendChild(closeBtn);
+}
+
+document.getElementById("downloadImage").addEventListener("click", () => {
+  html2canvas(document.getElementById("palette")).then((canvas) => {
+    const link = document.createElement("a");
+    link.download = "palette.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+});
+
+document.getElementById("downloadJSON").addEventListener("click", () => {
+  const paletteData = colors.map((c) => c.color);
+  const dataStr =
+    "data:text/json;charset=utf-8," +
+    encodeURIComponent(JSON.stringify(paletteData, null, 2));
+  const dlAnchor = document.createElement("a");
+  dlAnchor.setAttribute("href", dataStr);
+  dlAnchor.setAttribute("download", "palette.json");
+  dlAnchor.click();
+});
+
+document.getElementById("shareBtn").addEventListener("click", () => {
+  const colorCodes = colors.map((c) => c.color.replace("#", "")).join("-");
+  const shareURL = `${window.location.origin}${window.location.pathname}?colors=${colorCodes}`;
+
+  navigator.clipboard.writeText(shareURL).then(() => {
+    Toastify({
+      text: "Link copied to clipboard!",
+      duration: 2000,
+      gravity: "top",
+      position: "center",
+      backgroundColor: "#4CAF50",
+      style: { color: "#fff" },
+    }).showToast();
+  });
+});

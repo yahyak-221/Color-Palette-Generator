@@ -1,32 +1,5 @@
-Added three new features to the color palette generator to make it more flexible and fun to use. First, I added a manual color picker inside each color box, so now you can pick your own colors using a built-in color input. It updates the box and text automatically, and even works on locked colors. Second, I added a slider to let you choose how many color blocks you want to see — anywhere between 3 and 8. This setting is saved and stays the same next time you open the page. Lastly, I made it possible to rearrange the color blocks by dragging them around. This uses drag-and-drop with Sortable.js and saves the new order right away, so you can organize your colors however you like. These updates make the tool more customizable and user-friendly.
+I added several exciting features to my color palette tool! First, I made the toast notifications smarter by adjusting the font color based on background for better readability. Then I included a manual color picker so users can pick exact shades. I also added a slider to choose how many colors (3–8) to generate. Drag-and-drop sorting using Sortable.js makes rearranging colors super smooth. I improved the saved palettes so clicking a saved color now copies it instead of generating a new one. Lastly, I built a “Share Palette” feature — it generates a custom link with the color codes in the URL and copies it for easy sharing!
 
-
-
----
-
-## 📦 SAVING & SHARING
-
-Useful features for reusability:
-
-13. **Save Palettes (LocalStorage)**
-
-    * Save multiple palettes locally and list them on a sidebar or modal.
-
-14. **Download as Image or JSON**
-
-    * Export palette as:
-    * 📷 PNG (using html2canvas)
-    * 📄 JSON for reuse
-
-15. **Generate Shareable Link**
-
-    * Encode palette in URL query params (`?colors=FF0000-00FF00-0000FF`).
-
----
-
-## 📱 UI ENHANCEMENTS
-
-Make the project visually stunning:
 
 16. **Dark Mode / Light Mode**
 
