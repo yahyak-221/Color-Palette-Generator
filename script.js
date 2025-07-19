@@ -330,9 +330,13 @@ document.getElementById("shareBtn").addEventListener("click", () => {
     }).showToast();
   });
 });
-
 function fetchSmartPalette() {
-  fetch("https://www.thecolorapi.com/scheme?mode=random&count=5")
+  const randomHex = generateRandomColor().replace("#", "");
+
+  fetch(
+    `https://www.thecolorapi.com/scheme?hex=${randomHex}&mode=analogic&count=5`
+    // `mode=analogic,monochrome,monochrome-dark,monochrome-light,analogic-complement,complement,triad,quad`
+  )
     .then((res) => res.json())
     .then((data) => {
       const paletteData = data.colors.map((c) => c.hex.value.toUpperCase());
@@ -351,7 +355,7 @@ function fetchSmartPalette() {
       generatePalette();
 
       Toastify({
-        text: "Smart Palette Loaded!",
+        text: "AI Palette Loaded!",
         duration: 2000,
         gravity: "top",
         position: "center",
