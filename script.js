@@ -334,7 +334,7 @@ function fetchSmartPalette() {
   const randomHex = generateRandomColor().replace("#", "");
 
   fetch(
-    `https://www.thecolorapi.com/scheme?hex=${randomHex}&mode=analogic&count=5`
+    `https://www.thecolorapi.com/scheme?hex=${randomHex}&mode=monochrome&count=5`
     // `mode=analogic,monochrome,monochrome-dark,monochrome-light,analogic-complement,complement,triad,quad`
   )
     .then((res) => res.json())
