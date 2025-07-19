@@ -289,7 +289,6 @@ function showSavedPalettes() {
     modal.appendChild(row);
   });
 
-  // Add close button
   const closeBtn = document.createElement("button");
   closeBtn.textContent = "Close";
   closeBtn.onclick = () => (modal.style.display = "none");
@@ -331,3 +330,44 @@ document.getElementById("shareBtn").addEventListener("click", () => {
     }).showToast();
   });
 });
+
+function fetchSmartPalette() {
+  fetch("https://www.thecolorapi.com/scheme?mode=random&count=5")
+    .then((res) => res.json())
+    .then((data) => {
+      const paletteData = data.colors.map((c) => c.hex.value.toUpperCase());
+
+      numColors = paletteData.length;
+      document.getElementById("colorCount").value = numColors;
+      document.getElementById("colorCountValue").textContent = numColors;
+
+      for (let i = 0; i < numColors; i++) {
+        colors[i] = {
+          color: paletteData[i],
+          locked: false,
+        };
+      }
+
+      generatePalette();
+
+      Toastify({
+        text: "Smart Palette Loaded!",
+        duration: 2000,
+        gravity: "top",
+        position: "center",
+        backgroundColor: "#333",
+        style: { color: "#fff" },
+      }).showToast();
+    })
+    .catch((err) => {
+      console.error("ColorAPI error:", err);
+      Toastify({
+        text: "Failed to fetch smart palette",
+        duration: 2000,
+        gravity: "top",
+        position: "center",
+        backgroundColor: "#e74c3c",
+        style: { color: "#fff" },
+      }).showToast();
+    });
+}
