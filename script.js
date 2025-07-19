@@ -330,16 +330,24 @@ document.getElementById("shareBtn").addEventListener("click", () => {
     }).showToast();
   });
 });
+
 function fetchSmartPalette() {
-  const randomHex = generateRandomColor().replace("#", "");
+  const randomColor = generateRandomColor().replace("#", "");
 
   fetch(
-    `https://www.thecolorapi.com/scheme?hex=${randomHex}&mode=monochrome&count=5`
+    `https://www.thecolorapi.com/scheme?hex=${randomColor}&mode=analogic&count=5`
     // `mode=analogic,monochrome,monochrome-dark,monochrome-light,analogic-complement,complement,triad,quad`
   )
-    .then((res) => res.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      return response.json();
+    })
     .then((data) => {
-      const paletteData = data.colors.map((c) => c.hex.value.toUpperCase());
+      const paletteData = data.colors.map((color) =>
+        color.hex.value.toUpperCase()
+      );
 
       numColors = paletteData.length;
       document.getElementById("colorCount").value = numColors;
@@ -355,7 +363,7 @@ function fetchSmartPalette() {
       generatePalette();
 
       Toastify({
-        text: "AI Palette Loaded!",
+        text: "Smart Palette Loaded!",
         duration: 2000,
         gravity: "top",
         position: "center",
@@ -363,11 +371,11 @@ function fetchSmartPalette() {
         style: { color: "#fff" },
       }).showToast();
     })
-    .catch((err) => {
-      console.error("ColorAPI error:", err);
+    .catch((error) => {
+      console.error("Color API fetch failed:", error);
       Toastify({
-        text: "Failed to fetch smart palette",
-        duration: 2000,
+        text: "Failed to fetch smart palette 😓",
+        duration: 3000,
         gravity: "top",
         position: "center",
         backgroundColor: "#e74c3c",
