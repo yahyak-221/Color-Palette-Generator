@@ -158,7 +158,6 @@ function generatePalette() {
   }
 
   savePalette();
-  palette.appendChild(box);
 }
 
 function initSortable() {
@@ -211,7 +210,7 @@ function savePalette() {
 
 function saveCurrentPalette() {
   const saved = JSON.parse(localStorage.getItem("savedPalettes") || "[]");
-  saved.push([...colors]); // Clone the current palette
+  saved.push([...colors]);
   localStorage.setItem("savedPalettes", JSON.stringify(saved));
   Toastify({
     text: "Palette saved!",
@@ -289,7 +288,6 @@ function showSavedPalettes() {
     modal.appendChild(row);
   });
 
-  // Add close button
   const closeBtn = document.createElement("button");
   closeBtn.textContent = "Close";
   closeBtn.onclick = () => (modal.style.display = "none");
@@ -331,3 +329,56 @@ document.getElementById("shareBtn").addEventListener("click", () => {
     }).showToast();
   });
 });
+
+function fetchSmartPalette() {
+  const randomColor = generateRandomColor().replace("#", "");
+
+  fetch(
+    `https://www.thecolorapi.com/scheme?hex=${randomColor}&mode=triad&count=5`
+    // `mode=analogic,monochrome,monochrome-dark,monochrome-light,analogic-complement,complement,triad,quad`
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const paletteData = data.colors.map((color) =>
+        color.hex.value.toUpperCase()
+      );
+
+      numColors = paletteData.length;
+      document.getElementById("colorCount").value = numColors;
+      document.getElementById("colorCountValue").textContent = numColors;
+
+      for (let i = 0; i < numColors; i++) {
+        colors[i] = {
+          color: paletteData[i],
+          locked: false,
+        };
+      }
+
+      generatePalette();
+
+      Toastify({
+        text: "Smart Palette Loaded!",
+        duration: 2000,
+        gravity: "top",
+        position: "center",
+        backgroundColor: "#333",
+        style: { color: "#fff" },
+      }).showToast();
+    })
+    .catch((error) => {
+      console.error("Color API fetch failed:", error);
+      Toastify({
+        text: "Failed to fetch smart palette 😓",
+        duration: 3000,
+        gravity: "top",
+        position: "center",
+        backgroundColor: "#e74c3c",
+        style: { color: "#fff" },
+      }).showToast();
+    });
+}

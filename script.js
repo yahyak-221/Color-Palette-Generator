@@ -158,7 +158,6 @@ function generatePalette() {
   }
 
   savePalette();
-  palette.appendChild(box);
 }
 
 function initSortable() {
@@ -211,7 +210,7 @@ function savePalette() {
 
 function saveCurrentPalette() {
   const saved = JSON.parse(localStorage.getItem("savedPalettes") || "[]");
-  saved.push([...colors]); // Clone the current palette
+  saved.push([...colors]);
   localStorage.setItem("savedPalettes", JSON.stringify(saved));
   Toastify({
     text: "Palette saved!",
@@ -335,7 +334,7 @@ function fetchSmartPalette() {
   const randomColor = generateRandomColor().replace("#", "");
 
   fetch(
-    `https://www.thecolorapi.com/scheme?hex=${randomColor}&mode=analogic&count=5`
+    `https://www.thecolorapi.com/scheme?hex=${randomColor}&mode=triad&count=5`
     // `mode=analogic,monochrome,monochrome-dark,monochrome-light,analogic-complement,complement,triad,quad`
   )
     .then((response) => {
