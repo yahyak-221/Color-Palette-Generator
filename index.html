@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Color Palette Generator</title>
     <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./harmonies.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
@@ -21,7 +22,6 @@
         <button onclick="generatePalette()">Generate</button>
         <br>
         <button onclick="fetchSmartPalette()">🎨 Smart Palette (AI)</button>
-
         <br><br>
         <label for="colorCount">Number of Colors: <span id="colorCountValue">5</span></label>
         <input type="range" id="colorCount" min="3" max="8" value="5" />
@@ -34,10 +34,24 @@
         <button id="downloadJSON">📄 Download JSON</button>
         <br>
         <button id="shareBtn">🔗 Share Palette</button>
-
     </div>
 
 
+    <div id="harmony-section" class="harmony-container">
+        <h3>Color Harmonies</h3>
+        <div id="harmony-schemes"></div>
+    </div>
+
+    <div class="gradient-section">
+        <h3>Gradient Generator</h3>
+        <input type="color" id="grad-color-1" value="#00C9FF">
+        <input type="color" id="grad-color-2" value="#92FE9D">
+        <button onclick="generateGradient()">Preview Gradient</button>
+        <div id="gradient-preview"></div>
+        <pre id="gradient-code"></pre>
+    </div>
+
+    <script src="./harmonies.js"></script>
     <script src="./script.js"></script>
 </body>
 

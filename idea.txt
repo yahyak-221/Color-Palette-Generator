@@ -1,54 +1,12 @@
-I added several exciting features to my color palette tool! First, I made the toast notifications smarter by adjusting the font color based on background for better readability. Then I included a manual color picker so users can pick exact shades. I also added a slider to choose how many colors (3–8) to generate. Drag-and-drop sorting using Sortable.js makes rearranging colors super smooth. I improved the saved palettes so clicking a saved color now copies it instead of generating a new one. Lastly, I built a “Share Palette” feature — it generates a custom link with the color codes in the URL and copies it for easy sharing!
+expanded the Color Palette Generator with two creative tools aimed at designers: Color Harmonies and Gradient Generation. First, I implemented a color theory module that calculates and displays complementary, triadic, and analogous color schemes based on any selected color. This required converting hex codes to HSL, shifting hue values logically, and displaying the derived swatches in a responsive layout. Next, I introduced a gradient preview generator that allows users to select two colors and instantly see a linear gradient preview with live CSS output for copy-pasting. These features were carefully designed to be intuitive, non-intrusive, and visually aligned with the app’s glassmorphism aesthetic. Both updates empower users with smarter color decision-making and practical tools for web and UI design, further aligning the app with modern color design platforms.
 
 
-16. **Dark Mode / Light Mode**
 
-    * Toggle switch to adjust entire theme.
-
-17. **Responsive Layout**
-
-    * Flexbox or grid for mobile + desktop support.
-
-18. **Animated Transitions**
-
-    * Smooth fade/scale for generating and copying colors.
-
-19. **Tailwind CSS Integration**
-
-    * For modern, responsive styling out of the box.
-
----
-
-## 🌐 ADVANCED / API INTEGRATION
-
-Stretch your skills even further:
-
-20. **Use Colormind or Coolors API**
-
-    * Fetch smart palettes using AI-based color suggestions.
-
-21. **Accessibility Checker**
-
-    * Validate contrast ratio for WCAG standards.
-
-22. **Palette Popularity / Likes**
-
-    * Store saved palettes with like buttons (requires backend or Firebase).
 
 23. **User Accounts (Auth + Save Palettes)**
-
     * Save palettes per user with PHP + MySQL or Firebase.
 
-24. **Color Harmonies / Color Theory Tools**
-
-    * Show complementary, triadic, analogous schemes based on a picked color.
-
-25. **Generate Gradients or Backgrounds**
-
-    * Convert color pairs into gradient previews (CSS code output).
-
 ## 🧠 BONUS IDEAS
-
 * **Color Blind Simulator Preview**
 * **Trending Palettes Section**
 * **Keyboard Shortcut (press space to regenerate)**
@@ -56,7 +14,6 @@ Stretch your skills even further:
 
 
 ### Want to Build a Version With...
-
 * Lock/unlock features?
 * Palette save/load with preview?
 * Gradient generator?

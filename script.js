@@ -148,6 +148,7 @@ function generatePalette() {
     picker.addEventListener("input", (e) => {
       const pickedColor = e.target.value.toUpperCase();
       updateColor(i, pickedColor);
+      showColorHarmonies(pickedColor); // 👈 Add this
     });
 
     box.appendChild(lockIcon);
