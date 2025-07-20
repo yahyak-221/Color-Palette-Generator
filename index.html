@@ -6,53 +6,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Color Palette Generator</title>
     <link rel="stylesheet" href="./style.css" />
-    <link rel="stylesheet" href="./harmonies.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" data-aos="zoom-in">
         <h1>Color Palette Generator</h1>
+
         <div id="palette" class="palette"></div>
-        <br>
-        <button onclick="generatePalette()">Generate</button>
-        <br>
-        <button onclick="fetchSmartPalette()">🎨 Smart Palette (AI)</button>
-        <br><br>
-        <label for="colorCount">Number of Colors: <span id="colorCountValue">5</span></label>
-        <input type="range" id="colorCount" min="3" max="8" value="5" />
-        <br>
-        <button onclick="saveCurrentPalette()">💾 Save Palette</button>
-        <button onclick="showSavedPalettes()">📂 View Saved</button>
+
+        <section class="actions">
+            <div class="button-row">
+                <button onclick="generatePalette()">🎲 Generate</button>
+                <select id="themeSelector">
+                    <option value="random">Random</option>
+                    <option value="warm">Warm</option>
+                    <option value="cool">Cool</option>
+                    <option value="earthy">Earthy</option>
+                    <option value="pastel">Pastel</option>
+                    <option value="monochrome">Monochrome</option>
+                </select>
+
+                <button onclick="fetchSmartPalette()">🎨 Smart Palette (AI)</button>
+            </div>
+
+            <div class="range-control">
+                <label for="colorCount">Number of Colors: <span id="colorCountValue">5</span></label>
+                <input type="range" id="colorCount" min="3" max="8" value="5" />
+            </div>
+
+            <div class="button-row">
+                <button onclick="saveCurrentPalette()">💾 Save Palette</button>
+                <button onclick="showSavedPalettes()">📂 View Saved</button>
+            </div>
+
+            <div class="button-row">
+                <button id="downloadImage">📷 Download PNG</button>
+                <button id="downloadJSON">📄 Download JSON</button>
+            </div>
+
+            <div class="button-row">
+                <button onclick="exportAsCSSVars()">🧩 Export as CSS Vars</button>
+                <button id="shareBtn">🔗 Share Palette</button>
+            </div>
+        </section>
+
         <div id="savedPalettesModal" class="modal" style="display:none;"></div>
-        <br>
-        <button id="downloadImage">📷 Download PNG</button>
-        <button id="downloadJSON">📄 Download JSON</button>
-        <br>
-        <button id="shareBtn">🔗 Share Palette</button>
     </div>
 
-
-    <div id="harmony-section" class="harmony-container">
+    <div class="harmony-container">
         <h3>Color Harmonies</h3>
         <div id="harmony-schemes"></div>
     </div>
 
     <div class="gradient-section">
         <h3>Gradient Generator</h3>
-        <input type="color" id="grad-color-1" value="#00C9FF">
-        <input type="color" id="grad-color-2" value="#92FE9D">
-        <button onclick="generateGradient()">Preview Gradient</button>
+        <div class="gradient-controls">
+            <input type="color" id="grad-color-1" value="#00C9FF">
+            <input type="color" id="grad-color-2" value="#92FE9D">
+            <button onclick="generateGradient()">Preview Gradient</button>
+        </div>
         <div id="gradient-preview"></div>
         <pre id="gradient-code"></pre>
     </div>
 
     <script src="./harmonies.js"></script>
     <script src="./script.js"></script>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 600, once: true });
+    </script>
 </body>
 
 </html>

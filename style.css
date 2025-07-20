@@ -1,82 +1,181 @@
 @import url("https://fonts.googleapis.com/css2?family=Aubrey&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 
+:root {
+  --accent: #ff7f4c;
+  --glass-bg: rgba(30, 30, 30, 0.11);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --text-dark: #222;
+  --text-light: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.12);
+  --hover-shadow: rgba(0, 0, 0, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 ::selection {
-  color: rgb(255, 127, 76);
-  background-color: aliceblue;
+  background-color: var(--text-light);
+  color: var(--accent);
 }
 
 body {
-  font-family: sans-serif;
+  font-family: "Outfit", sans-serif;
+  background: linear-gradient(145deg, #ffd6d6, #ffe8e8);
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1.5rem;
+  gap: 2rem;
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.color-box {
+  animation: slideInUp 0.4s ease-in-out;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.actions {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.range-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gradient-controls {
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #ff9c9c, #f8c4c4);
-  margin: 0;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.container {
+.container,
+.harmony-container,
+.gradient-section {
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: 0 10px 30px var(--shadow);
+  padding: 3rem 2rem;
+  width: 100%;
   text-align: center;
-  background: rgba(15, 18, 20, 0.089);
-  border-radius: 20px;
-  padding: 40px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: 0.3s ease-in-out;
 }
 
-.palette .color-box {
-  touch-action: none;
-}
-.palette .color-box.sortable-chosen {
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-.palette .color-box.sortable-ghost {
-  opacity: 0.3;
+.container:hover,
+.harmony-container:hover,
+.gradient-section:hover {
+  box-shadow: 0 15px 40px var(--hover-shadow);
 }
 
-.container h1 {
-  color: #1f1f1f;
-  font-family: "Aubrey", system-ui;
-  font-size: xx-large;
-}
-.container button {
-  color: #1f1f1f;
-  font-family: "Aubrey", system-ui;
-  font-size: x-large;
+h1,
+h3 {
+  font-family: "Aubrey", cursive;
+  font-size: 2.5rem;
+  color: var(--text-dark);
+  margin-bottom: 1.2rem;
 }
 
-.color-code {
+button {
   font-family: "Outfit", sans-serif;
-  letter-spacing: 1px;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--text-dark);
+  background: #fff;
+  padding: 0.8rem 1.2rem;
+  margin: 8px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-.toastify {
-  font-family: "Outfit", sans-serif;
-  letter-spacing: 1px;
+button:hover {
+  background: var(--accent);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+input[type="range"] {
+  margin-top: 10px;
+  width: 60%;
 }
 
 .palette {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  margin: 20px 0;
-  gap: 10px;
+  gap: 16px;
+  margin: 2rem 0;
 }
 
 .color-box {
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
+  width: 110px;
+  height: 110px;
+  border-radius: 16px;
   position: relative;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .color-box:hover {
-  transform: scale(1.05);
+  transform: scale(1.07);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.color-box:active {
+  transform: rotate(3deg) scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+.color-box.sortable-chosen {
+  transform: scale(1.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.color-box.sortable-ghost {
+  opacity: 0.4;
 }
 
 .color-code {
@@ -84,20 +183,32 @@ body {
   bottom: -30px;
   width: 100%;
   text-align: center;
-  font-weight: bold;
-  color: #333;
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 0.9rem;
+  font-family: "Outfit", sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.lock-icon,
+.refresh-icon {
+  position: absolute;
+  top: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  padding: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  user-select: none;
 }
 
 .lock-icon {
-  position: absolute;
-  top: 8px;
   right: 8px;
-  border-radius: 50%;
-  padding: 4px;
-  font-size: 14px;
-  cursor: pointer;
-  user-select: none;
-  transition: transform 0.2s;
+}
+
+.refresh-icon {
+  left: 8px;
 }
 
 .locked {
@@ -105,14 +216,61 @@ body {
   color: white;
 }
 
-.refresh-icon {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  border-radius: 50%;
-  padding: 4px;
-  font-size: 14px;
+/* Harmony */
+.harmony-container h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.6rem;
+  color: var(--text-dark);
+}
+
+.harmony-colors {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.harmony-colors div {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
   cursor: pointer;
-  user-select: none;
-  transition: transform 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Gradient Generator */
+.gradient-section input[type="color"] {
+  margin: 0 10px;
+  height: 48px;
+  width: 60px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#gradient-preview {
+  height: 100px;
+  margin-top: 1rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
+
+#gradient-code {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 12px;
+  margin-top: 0.5rem;
+  border-radius: 10px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #333;
+}
+
+/* Toastify override */
+.toastify {
+  font-family: "Outfit", sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.4px;
+  border-radius: 8px;
+  padding: 8px 16px;
 }

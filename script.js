@@ -44,13 +44,72 @@ window.onload = function () {
   }
 };
 
-function generateRandomColor() {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
+function generateRandomColor(theme = "random") {
+  const h = () => Math.floor(Math.random() * 360); // Hue: 0–359
+  const s = () => Math.floor(Math.random() * 30) + 70; // Saturation: 70–100%
+  const l = () => Math.floor(Math.random() * 20) + 40; // Lightness: 40–60%
+
+  let hue;
+
+  switch (theme) {
+    case "warm":
+      hue = Math.floor(Math.random() * 60) + 0; // Red–Orange (0–60)
+      break;
+    case "cool":
+      hue = Math.floor(Math.random() * 120) + 180; // Cyan–Blue (180–300)
+      break;
+    case "earthy":
+      hue = [25, 30, 35, 40, 90, 120, 150][Math.floor(Math.random() * 7)]; // Browns/Greens
+      break;
+    case "pastel":
+      return hslToHex(
+        h(),
+        Math.floor(Math.random() * 30) + 40,
+        Math.floor(Math.random() * 20) + 75
+      );
+    case "monochrome":
+      let gray = Math.floor(Math.random() * 155) + 50;
+      return rgbToHex(gray, gray, gray);
+    default:
+      hue = h(); // Fully random
   }
-  return color;
+
+  return hslToHex(hue, s(), l());
+}
+
+function hslToHex(h, s, l) {
+  s /= 100;
+  l /= 100;
+
+  let c = (1 - Math.abs(2 * l - 1)) * s,
+    x = c * (1 - Math.abs(((h / 60) % 2) - 1)),
+    m = l - c / 2,
+    r = 0,
+    g = 0,
+    b = 0;
+
+  if (0 <= h && h < 60) [r, g, b] = [c, x, 0];
+  else if (60 <= h && h < 120) [r, g, b] = [x, c, 0];
+  else if (120 <= h && h < 180) [r, g, b] = [0, c, x];
+  else if (180 <= h && h < 240) [r, g, b] = [0, x, c];
+  else if (240 <= h && h < 300) [r, g, b] = [x, 0, c];
+  else if (300 <= h && h < 360) [r, g, b] = [c, 0, x];
+
+  r = Math.round((r + m) * 255)
+    .toString(16)
+    .padStart(2, "0");
+  g = Math.round((g + m) * 255)
+    .toString(16)
+    .padStart(2, "0");
+  b = Math.round((b + m) * 255)
+    .toString(16)
+    .padStart(2, "0");
+
+  return `#${r}${g}${b}`.toUpperCase();
+}
+
+function randomBetween(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 function getContrastColor(hex) {
@@ -63,14 +122,17 @@ function getContrastColor(hex) {
 
 function generatePalette() {
   const palette = document.getElementById("palette");
+  const selectedTheme =
+    document.getElementById("themeSelector")?.value || "random";
   palette.innerHTML = "";
 
   for (let i = 0; i < numColors; i++) {
     let color;
+
     if (colors[i] && colors[i].locked) {
       color = colors[i].color;
     } else {
-      color = generateRandomColor();
+      color = generateRandomColor(selectedTheme); // 🔥 Theme support
     }
 
     colors[i] = {
@@ -81,9 +143,11 @@ function generatePalette() {
     const box = document.createElement("div");
     box.className = "color-box";
     box.style.backgroundColor = color;
+    box.setAttribute("data-aos", "zoom-in"); // 💫 Smooth palette entry
 
     const textColor = getContrastColor(color);
 
+    // 🔒 Lock Icon
     const lockIcon = document.createElement("div");
     lockIcon.className = "lock-icon";
     lockIcon.innerHTML = colors[i].locked ? "🔒" : "🔓";
@@ -98,6 +162,7 @@ function generatePalette() {
       savePalette();
     });
 
+    // 🔁 Refresh Icon
     const refreshIcon = document.createElement("div");
     refreshIcon.className = "refresh-icon";
     refreshIcon.innerHTML = "🔁";
@@ -106,11 +171,12 @@ function generatePalette() {
     refreshIcon.addEventListener("click", (e) => {
       e.stopPropagation();
       if (!colors[i].locked) {
-        const newColor = generateRandomColor();
+        const newColor = generateRandomColor(selectedTheme);
         updateColor(i, newColor);
       }
     });
 
+    // 🎨 Color Code Display + Copy
     const code = document.createElement("div");
     code.className = "color-code";
     code.innerText = color;
@@ -134,6 +200,7 @@ function generatePalette() {
       }).showToast();
     });
 
+    // 🎛️ Color Picker
     const picker = document.createElement("input");
     picker.type = "color";
     picker.value = color;
@@ -148,9 +215,10 @@ function generatePalette() {
     picker.addEventListener("input", (e) => {
       const pickedColor = e.target.value.toUpperCase();
       updateColor(i, pickedColor);
-      showColorHarmonies(pickedColor); // 👈 Add this
+      showColorHarmonies(pickedColor);
     });
 
+    // Append everything
     box.appendChild(lockIcon);
     box.appendChild(refreshIcon);
     box.appendChild(code);
@@ -159,6 +227,7 @@ function generatePalette() {
   }
 
   savePalette();
+  AOS.refresh(); // 💥 Refresh AOS after palette regeneration
 }
 
 function initSortable() {
@@ -382,4 +451,74 @@ function fetchSmartPalette() {
         style: { color: "#fff" },
       }).showToast();
     });
+}
+
+function saveCurrentPalette() {
+  const paletteColors = Array.from(document.querySelectorAll(".color-box")).map(
+    (box) => box.style.backgroundColor
+  );
+
+  const saved = JSON.parse(localStorage.getItem("saved-palettes")) || [];
+  saved.push({ colors: paletteColors, date: new Date().toISOString() });
+  localStorage.setItem("saved-palettes", JSON.stringify(saved));
+
+  Toastify({
+    text: "Palette saved!",
+    duration: 2000,
+    gravity: "bottom",
+    backgroundColor: "#4caf50",
+  }).showToast();
+}
+
+function showSavedPalettes() {
+  const saved = JSON.parse(localStorage.getItem("saved-palettes")) || [];
+  const modal = document.getElementById("savedPalettesModal");
+  modal.innerHTML = `<h3>Saved Palettes</h3>`;
+
+  saved.reverse().forEach((palette) => {
+    const preview = document.createElement("div");
+    preview.style.display = "flex";
+    preview.style.margin = "10px 0";
+    preview.style.justifyContent = "center";
+    preview.innerHTML = palette.colors
+      .map(
+        (c) =>
+          `<div style="width:30px;height:30px;margin:2px;border-radius:4px;background:${c}"></div>`
+      )
+      .join("");
+    preview.style.cursor = "pointer";
+    preview.onclick = () => applyPalette(palette.colors);
+    modal.appendChild(preview);
+  });
+
+  modal.style.display = "block";
+}
+
+function applyPalette(colors) {
+  const paletteContainer = document.getElementById("palette");
+  paletteContainer.innerHTML = "";
+  colors.forEach((color) => {
+    const box = document.createElement("div");
+    box.className = "color-box";
+    box.style.backgroundColor = color;
+    box.innerHTML = `<div class="color-code">${color}</div>`;
+    paletteContainer.appendChild(box);
+  });
+}
+
+function exportAsCSSVars() {
+  const colors = Array.from(document.querySelectorAll(".color-box"))
+    .map((box, i) => `--color-${i + 1}: ${box.style.backgroundColor};`)
+    .join("\n");
+
+  const output = `:root {\n${colors}\n}`;
+  downloadText("palette-vars.css", output);
+}
+
+function downloadText(filename, content) {
+  const blob = new Blob([content], { type: "text/plain" });
+  const link = document.createElement("a");
+  link.download = filename;
+  link.href = URL.createObjectURL(blob);
+  link.click();
 }
