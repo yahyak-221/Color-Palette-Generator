@@ -68,8 +68,10 @@ function generateRandomColor(theme = "random") {
         Math.floor(Math.random() * 20) + 75
       );
     case "monochrome":
-      let gray = Math.floor(Math.random() * 155) + 50;
+      const step = Math.floor(200 / (numColors - 1));
+      const gray = 30 + step * i;
       return rgbToHex(gray, gray, gray);
+
     default:
       hue = h(); // Fully random
   }
@@ -132,18 +134,28 @@ function generatePalette() {
     if (colors[i] && colors[i].locked) {
       color = colors[i].color;
     } else {
-      color = generateRandomColor(selectedTheme); // 🔥 Theme support
+      if (selectedTheme === "monochrome") {
+        // Generate light-to-dark gray shades
+        const minGray = 20;
+        const maxGray = 235;
+        const step = Math.floor((maxGray - minGray) / (numColors - 1));
+        const gray = maxGray - step * i;
+        color = rgbToHex(gray, gray, gray);
+      } else {
+        color = generateRandomColor(selectedTheme);
+      }
     }
 
+    // Update color array
     colors[i] = {
       color,
-      locked: colors[i] ? colors[i].locked : false,
+      locked: colors[i]?.locked || false,
     };
 
     const box = document.createElement("div");
     box.className = "color-box";
     box.style.backgroundColor = color;
-    box.setAttribute("data-aos", "zoom-in"); // 💫 Smooth palette entry
+    box.setAttribute("data-aos", "zoom-in");
 
     const textColor = getContrastColor(color);
 
@@ -171,17 +183,27 @@ function generatePalette() {
     refreshIcon.addEventListener("click", (e) => {
       e.stopPropagation();
       if (!colors[i].locked) {
-        const newColor = generateRandomColor(selectedTheme);
+        const newColor =
+          selectedTheme === "monochrome"
+            ? (() => {
+                const minGray = 20;
+                const maxGray = 235;
+                const step = Math.floor((maxGray - minGray) / (numColors - 1));
+                const gray = maxGray - step * i;
+                return rgbToHex(gray, gray, gray);
+              })()
+            : generateRandomColor(selectedTheme);
         updateColor(i, newColor);
       }
     });
 
-    // 🎨 Color Code Display + Copy
+    // 🎨 Color Code
     const code = document.createElement("div");
     code.className = "color-code";
     code.innerText = color;
     code.style.color = textColor;
 
+    // Copy to Clipboard on click
     box.addEventListener("click", () => {
       const currentColor = colors[i].color;
       const toastTextColor = getContrastColor(currentColor);
@@ -218,7 +240,7 @@ function generatePalette() {
       showColorHarmonies(pickedColor);
     });
 
-    // Append everything
+    // Append all elements to box
     box.appendChild(lockIcon);
     box.appendChild(refreshIcon);
     box.appendChild(code);
@@ -227,7 +249,20 @@ function generatePalette() {
   }
 
   savePalette();
-  AOS.refresh(); // 💥 Refresh AOS after palette regeneration
+  AOS.refresh(); // Re-init animations
+}
+
+function rgbToHex(r, g, b) {
+  return (
+    "#" +
+    [r, g, b]
+      .map((x) => {
+        const hex = x.toString(16);
+        return hex.length === 1 ? "0" + hex : hex;
+      })
+      .join("")
+      .toUpperCase()
+  );
 }
 
 function initSortable() {
