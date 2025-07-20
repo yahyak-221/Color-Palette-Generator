@@ -17,20 +17,9 @@ window.onload = function () {
     }
   }
 
-  const colorSlider = document.getElementById("colorCount");
-  const colorCountValue = document.getElementById("colorCountValue");
-  colorSlider.addEventListener("input", () => {
-    numColors = parseInt(colorSlider.value);
-    colorCountValue.textContent = numColors;
-    colors.length = numColors;
-    localStorage.setItem("numColors", numColors);
-    generatePalette();
-  });
-
-  generatePalette();
+  // ✅ This should go before generatePalette
   const urlParams = new URLSearchParams(window.location.search);
   const urlColors = urlParams.get("colors");
-
   if (urlColors) {
     const decodedColors = urlColors
       .split("-")
@@ -42,6 +31,18 @@ window.onload = function () {
     document.getElementById("colorCount").value = numColors;
     document.getElementById("colorCountValue").textContent = numColors;
   }
+
+  const colorSlider = document.getElementById("colorCount");
+  const colorCountValue = document.getElementById("colorCountValue");
+  colorSlider.addEventListener("input", () => {
+    numColors = parseInt(colorSlider.value);
+    colorCountValue.textContent = numColors;
+    colors.length = numColors;
+    localStorage.setItem("numColors", numColors);
+    generatePalette();
+  });
+
+  generatePalette();
 };
 
 function generateRandomColor(theme = "random") {
@@ -138,8 +139,9 @@ function generatePalette() {
         // Generate light-to-dark gray shades
         const minGray = 20;
         const maxGray = 235;
-        const step = Math.floor((maxGray - minGray) / (numColors - 1));
-        const gray = maxGray - step * i;
+        const gray = Math.round(
+          maxGray - ((maxGray - minGray) * i) / (numColors - 1)
+        );
         color = rgbToHex(gray, gray, gray);
       } else {
         color = generateRandomColor(selectedTheme);
@@ -556,4 +558,51 @@ function downloadText(filename, content) {
   link.download = filename;
   link.href = URL.createObjectURL(blob);
   link.click();
+}
+
+function loadPaletteFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const colorParam = params.get("colors");
+  if (colorParam) {
+    const colors = colorParam.split("-").map((c) => `#${c}`);
+    renderPalette(colors);
+  }
+}
+
+function renderPalette(colors) {
+  const paletteContainer = document.getElementById("palette");
+  paletteContainer.innerHTML = "";
+
+  colors.forEach((hex, index) => {
+    const box = document.createElement("div");
+    box.className = "palette-box";
+    box.style.backgroundColor = hex;
+
+    const label = document.createElement("span");
+    label.className = "color-label";
+    label.textContent = hex.toUpperCase();
+
+    box.appendChild(label);
+    paletteContainer.appendChild(box);
+  });
+}
+
+function isPaletteDark(colors) {
+  let darkCount = 0;
+  colors.forEach((hex) => {
+    const rgb = hexToRgb(hex);
+    const luminance = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255;
+    if (luminance < 0.5) darkCount++;
+  });
+  return darkCount > colors.length / 2;
+}
+
+function hexToRgb(hex) {
+  const h = hex.replace("#", "");
+  const bigint = parseInt(h, 16);
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255,
+  };
 }
