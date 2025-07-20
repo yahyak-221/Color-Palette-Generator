@@ -1,4 +1,4 @@
-expanded the Color Palette Generator with two creative tools aimed at designers: Color Harmonies and Gradient Generation. First, I implemented a color theory module that calculates and displays complementary, triadic, and analogous color schemes based on any selected color. This required converting hex codes to HSL, shifting hue values logically, and displaying the derived swatches in a responsive layout. Next, I introduced a gradient preview generator that allows users to select two colors and instantly see a linear gradient preview with live CSS output for copy-pasting. These features were carefully designed to be intuitive, non-intrusive, and visually aligned with the app’s glassmorphism aesthetic. Both updates empower users with smarter color decision-making and practical tools for web and UI design, further aligning the app with modern color design platforms.
+hii, i've a chunk of css which is not place properly, can you take it all redesing my UI for my webiste??
 
 
 
