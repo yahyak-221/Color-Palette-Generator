@@ -17,7 +17,6 @@ window.onload = function () {
     }
   }
 
-  // ✅ This should go before generatePalette
   const urlParams = new URLSearchParams(window.location.search);
   const urlColors = urlParams.get("colors");
   if (urlColors) {
@@ -74,7 +73,7 @@ function generateRandomColor(theme = "random") {
       return rgbToHex(gray, gray, gray);
 
     default:
-      hue = h(); // Fully random
+      hue = h();
   }
 
   return hslToHex(hue, s(), l());
@@ -136,7 +135,6 @@ function generatePalette() {
       color = colors[i].color;
     } else {
       if (selectedTheme === "monochrome") {
-        // Generate light-to-dark gray shades
         const minGray = 20;
         const maxGray = 235;
         const gray = Math.round(
@@ -148,7 +146,6 @@ function generatePalette() {
       }
     }
 
-    // Update color array
     colors[i] = {
       color,
       locked: colors[i]?.locked || false,
@@ -161,7 +158,6 @@ function generatePalette() {
 
     const textColor = getContrastColor(color);
 
-    // 🔒 Lock Icon
     const lockIcon = document.createElement("div");
     lockIcon.className = "lock-icon";
     lockIcon.innerHTML = colors[i].locked ? "🔒" : "🔓";
@@ -176,7 +172,6 @@ function generatePalette() {
       savePalette();
     });
 
-    // 🔁 Refresh Icon
     const refreshIcon = document.createElement("div");
     refreshIcon.className = "refresh-icon";
     refreshIcon.innerHTML = "🔁";
@@ -199,13 +194,11 @@ function generatePalette() {
       }
     });
 
-    // 🎨 Color Code
     const code = document.createElement("div");
     code.className = "color-code";
     code.innerText = color;
     code.style.color = textColor;
 
-    // Copy to Clipboard on click
     box.addEventListener("click", () => {
       const currentColor = colors[i].color;
       const toastTextColor = getContrastColor(currentColor);
@@ -224,7 +217,6 @@ function generatePalette() {
       }).showToast();
     });
 
-    // 🎛️ Color Picker
     const picker = document.createElement("input");
     picker.type = "color";
     picker.value = color;
@@ -242,7 +234,6 @@ function generatePalette() {
       showColorHarmonies(pickedColor);
     });
 
-    // Append all elements to box
     box.appendChild(lockIcon);
     box.appendChild(refreshIcon);
     box.appendChild(code);
@@ -251,7 +242,7 @@ function generatePalette() {
   }
 
   savePalette();
-  AOS.refresh(); // Re-init animations
+  AOS.refresh();
 }
 
 function rgbToHex(r, g, b) {
